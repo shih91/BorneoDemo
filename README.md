@@ -23,11 +23,11 @@ pip is a handy tool to install libraries/dependencies for your python programs. 
 
 ### Install virtualenv
 
-We use virtualenv to create an isolated running environment to install dependencies and launch the web application. Head over to https://virtualenv.pypa.io/en/latest/installation.html for instructions to install virtualenv.
+Virtualenv is used to create an isolated running environment to install dependencies and launch the web application. Head over to https://virtualenv.pypa.io/en/latest/installation.html for instructions to install virtualenv.
 
 ### Install dependencies
 
-Once you have pip and virtualenv set up, we can proceed to create the environment to run our web applications:
+Once you have pip and virtualenv set up, we can proceed to create the environment to run the web application:
 
 ```bash
 # Locate the path for the Python 3 installation
