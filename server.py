@@ -43,9 +43,9 @@ class SearchHandler(BaseHandler):
         queryString = str(self.get_argument("q", None, True))
         print("Query String: " + queryString)
         # check if files are downloaded & download if not downloaded
-        updateLocalFiles(self)
+        self.updateLocalFiles()
         # parse downloaded files
-        parseLocalFiles(self)
+        self.parseLocalFiles()
         # query elasticsearch
         query_body = {
             "query": {
@@ -61,44 +61,40 @@ class SearchHandler(BaseHandler):
             name.append(hit["_source"].get('name'))
         self.render("index.html", results=name)
 
+    def updateLocalFiles(self):
+        for entry in self.application.dbx.files_list_folder('').entries:
+            if (isinstance(entry, dropbox.files.FileMetadata) and (entry.is_downloadable) and not os.path.isfile("./files/"+entry.path_lower)):
+                path = self.remove_suffix("", '/') + "files/" + \
+                    self.remove_prefix(entry.path_lower, "/")
+                try:
+                    os.makedirs(os.path.dirname(os.path.abspath(path)))
+                except:
+                    1+1
+                self.application.dbx.files_download_to_file(
+                    path, entry.path_lower)
 
-def updateLocalFiles(self):
-    for entry in self.application.dbx.files_list_folder('').entries:
-        if (isinstance(entry, dropbox.files.FileMetadata) and (entry.is_downloadable) and not os.path.isfile("./files/"+entry.path_lower)):
-            path = remove_suffix("", '/') + "files/" + \
-                remove_prefix(entry.path_lower, "/")
-            try:
-                os.makedirs(os.path.dirname(os.path.abspath(path)))
-            except:
-                1+1
-            self.application.dbx.files_download_to_file(
-                path, entry.path_lower)
-
-
-def parseLocalFiles(self):
-    for file in os.listdir("./files/"):
-        parsed = parser.from_file("./files/"+file)
-        data = {"name": os.fsdecode(file), "content": parsed["content"]}
-        query_name = {
-            "query": {
-                "match": {
-                    "name": os.fsdecode(file)
+    def parseLocalFiles(self):
+        for file in os.listdir("./files/"):
+            parsed = parser.from_file("./files/"+file)
+            data = {"name": os.fsdecode(file), "content": parsed["content"]}
+            query_name = {
+                "query": {
+                    "match": {
+                        "name": os.fsdecode(file)
+                    }
                 }
             }
-        }
-        result = self.application.es.search(
-            index="text_content", body=query_name)
-        if not len(result["hits"]["hits"]):
-            res = self.application.es.index(
-                index="text_content", body=data)
+            result = self.application.es.search(
+                index="text_content", body=query_name)
+            if not len(result["hits"]["hits"]):
+                res = self.application.es.index(
+                    index="text_content", body=data)
 
+    def remove_prefix(text, prefix):
+        return text[text.startswith(prefix) and len(prefix):]
 
-def remove_prefix(text, prefix):
-    return text[text.startswith(prefix) and len(prefix):]
-
-
-def remove_suffix(text, suffix):
-    return text[:-(text.endswith(suffix) and len(suffix))]
+    def remove_suffix(text, suffix):
+        return text[:-(text.endswith(suffix) and len(suffix))]
 
 
 def make_app(options):
