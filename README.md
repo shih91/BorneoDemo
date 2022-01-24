@@ -50,7 +50,13 @@ tornado==6.1
 
 ## Deployment
 
-Simply navigate to the main folder and run the service:
+1. Create a .env file in the main folder and key in the Dropbox Access Token:
+
+```
+DROPBOX_ACCESS_TOKEN=<YOUR_DROPBOX_ACCESS_TOKEN>
+```
+
+2. Navigate to the main folder and run the service:
 
 ```
 # Run the server
