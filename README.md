@@ -15,6 +15,8 @@ This application requires Elasticsearch to be install on the machine. (https://w
 
 Development work was done on Ubuntu 20.04 and this [guide](https://www.elastic.co/guide/en/elasticsearch/reference/7.16/deb.html#deb-repo) was followed to install Elasticsearch for my machine.
 
+For other OSes, please refer to this [guide](https://www.elastic.co/guide/en/elasticsearch/reference/current/install-elasticsearch.html).
+
 ### Install pip
 
 pip is a handy tool to install libraries/dependencies for your python programs. pip should already come installed on your system. Head over to https://pip.pypa.io/en/stable/installing/ for steps to install pip if it's not available.
