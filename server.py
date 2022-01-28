@@ -90,10 +90,10 @@ class SearchHandler(BaseHandler):
                 res = self.application.es.index(
                     index="text_content", body=data)
 
-    def remove_prefix(text, prefix):
+    def remove_prefix(self, text, prefix):
         return text[text.startswith(prefix) and len(prefix):]
 
-    def remove_suffix(text, suffix):
+    def remove_suffix(self, text, suffix):
         return text[:-(text.endswith(suffix) and len(suffix))]
 
 
